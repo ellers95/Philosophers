@@ -1,7 +1,12 @@
 NAME = philo
 CFLAGS = -Wall -Wextra -Werror
 
-SRCS =
+SRCS = main.c \
+initialize_philos.c \
+philo_actions.c \
+philo_print.c \
+philo_utils.c \
+run_philo.c
 
 OBJS_DIR = objs/
 OBJS = $(SRCS:%.c=%.o)
