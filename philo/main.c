@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:02:47 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/12 17:07:01 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/16 13:52:25 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ int main(int argc, char **argv)
         error_handler("Mutex initialization failed");
     attributes.start_time = get_time_ms();
     initialize_philos(philos, &attributes, &mutex);
-    spawn_philos(philos, &mutex);
+    spawn_philos(philos);
     god(philos, &attributes);
-    mutex_destroy(attributes.number_of_philos, &mutex);
+    destroy_mutex(attributes.number_of_philos, &mutex);
     free(philos);
     return (0);
 }

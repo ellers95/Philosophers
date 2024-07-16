@@ -3,21 +3,20 @@ CFLAGS = -Wall -Wextra -Werror
 
 SRCS = main.c \
 initialize_philos.c \
-philo_actions.c \
 philo_print.c \
 philo_utils.c \
 run_philo.c
 
+HEADERS = philo.h
 OBJS_DIR = objs/
-OBJS = $(SRCS:%.c=%.o)
-OBJS_PREFIXED = $(addprefix $(OBJS_DIR), $(OBJS))
+OBJS = $(SRCS:%.c=$(OBJS_DIR)%.o)
 
 $(OBJS_DIR)%.o: %.c $(HEADERS)
 	mkdir -p $(OBJS_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(OBJS_PREFIXED)
-	ar r $(NAME) $(OBJS_PREFIXED)
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -pthread
 
 all: $(NAME)
 
@@ -27,6 +26,6 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 
-re: flcean all
+re: fclean all
 
 .PHONY: all clean fclean re

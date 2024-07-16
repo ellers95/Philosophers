@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 15:20:03 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/12 16:27:53 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/12 18:31:32 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void    *run_philo(void *this)
     while (!philo->is_dead)
     {
         eat(philo);
-        sleep(philo);
+        ft_sleep(philo);
         think(philo);
     }
     return (NULL);
@@ -40,7 +40,7 @@ void    eat(t_philo *philo)
     pthread_mutex_unlock(philo->left_fork);
 }
 
-void    sleep(t_philo *philo)
+void    ft_sleep(t_philo *philo)
 {
     print_state(philo, "is sleeping");
     ft_usleep(philo->attributes->time_to_sleep);

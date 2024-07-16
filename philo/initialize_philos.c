@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:08:52 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/12 16:27:53 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/16 13:51:54 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void    initialize_philos(t_philo *philos, t_attributes *attributes, t_mutex *mu
     }
 }
 
-void    spawn_philos(t_philo *philos, t_mutex *mutex)
+void    spawn_philos(t_philo *philos)
 {
     int i;
     t_attributes    *attributes;
@@ -77,18 +77,28 @@ int initialize_mutex(int number_of_philos, t_mutex *mutex)
         return (0);
     while (i < number_of_philos)
     {
-        if (pthread_mutex_init(&mutex->forks[i], NULL))
+        if (pthread_mutex_init(&mutex->forks[i], NULL) != 0)
         {
             free(mutex->forks);
             return (0);
         }
+        i++;
     }
-    pthread_mutex_init(&mutex->death, NULL);
-    pthread_mutex_init(&mutex->print, NULL);
+    if (pthread_mutex_init(&mutex->death, NULL) != 0)
+    {
+        free(mutex->forks);
+        return (0);
+    }
+    if (pthread_mutex_init(&mutex->print, NULL) != 0)
+    {
+        pthread_mutex_destroy(&mutex->death);
+        free(mutex->forks);
+        return (0);
+    }
     return (1);
 }
 
-int destory_mutex(int number_of_philos, t_mutex *mutex)
+int destroy_mutex(int number_of_philos, t_mutex *mutex)
 {
     int i;
 
@@ -99,7 +109,7 @@ int destory_mutex(int number_of_philos, t_mutex *mutex)
         i++;
     }
     free(mutex->forks);
-    pthread_mutex_destory(&mutex->death);
-    pthread_mutex_destory(&mutex->print);
+    pthread_mutex_destroy(&mutex->death);
+    pthread_mutex_destroy(&mutex->print);
     return (1);
 }
