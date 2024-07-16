@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:02:47 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/16 13:52:25 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/16 16:21:48 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,22 @@ int set_attributes(t_attributes *attributes, int argc, char **argv)
     attributes->time_to_die = ft_atoi(argv[2]);
     attributes->time_to_eat = ft_atoi(argv[3]);
     attributes->time_to_sleep = ft_atoi(argv[4]);
+    
+    if (attributes->number_of_philos < 0 || attributes->time_to_die < 0 ||
+        attributes->time_to_eat < 0 || attributes->time_to_sleep < 0)
+    {
+        error_handler("arguments 1 - 5 must be positive integers.");
+        return (0);
+    }
     if (argc == 6)
         attributes->number_of_meals = ft_atoi(argv[5]);
     else
         attributes->number_of_meals = -1;
+    if (attributes->number_of_meals < -1)
+    {
+        error_handler("arguments 1 - 5 must be positive integers.");
+        return (0);
+    }
     return (1);
 }
 
