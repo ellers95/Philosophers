@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:34:32 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/16 15:45:10 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/16 16:50:18 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,30 +71,4 @@ void    god(t_philo *philos, t_attributes *attributes)
         i = 0;
         usleep(1000);
     }
-}
-
-int ft_atoi(char *str)
-{
-    int sign;
-    int sum;
-    int i;
-
-    sign = 1;
-    sum = 0;
-    i = 0;
-    while (str[i] == ' ' || str[i] == '\n' || str[i] == '\v'
-                    || str[i] == '\f' || str[i] == '\r')
-            i++;
-    if (str[i] == '-' || str[i] == '+')
-    {
-        if (str[i] == '-')
-            sign = -1;
-        i++;
-    }
-    while (str[i] >= '0' && str[i] <= '9')
-    {
-        sum = sum * 10 + (str[i] - '0');
-        i++;
-    }
-    return (sum * sign);
 }

@@ -5,6 +5,7 @@ SRCS = main.c \
 initialize_philos.c \
 philo_print.c \
 philo_utils.c \
+philo_libft_utils.c \
 run_philo.c
 
 HEADERS = philo.h

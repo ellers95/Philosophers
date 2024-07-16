@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:02:47 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/16 16:21:48 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/16 17:03:18 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,28 +20,35 @@ void    error_handler(char *str)
 
 int set_attributes(t_attributes *attributes, int argc, char **argv)
 {
+    int i;
+
+    i = 1;
     if (argc < 5 || argc > 6)
         return (0);
+    while (i <= 4)
+    {
+        if (!is_digit(argv[i]) || ft_atoi(argv[i]) <= 0)
+        {
+            error_handler("arguments 1 - 4 must be positive integers.");
+            return (0);
+        }
+        i++;
+    }
     attributes->number_of_philos = ft_atoi(argv[1]);
     attributes->time_to_die = ft_atoi(argv[2]);
     attributes->time_to_eat = ft_atoi(argv[3]);
     attributes->time_to_sleep = ft_atoi(argv[4]);
-    
-    if (attributes->number_of_philos < 0 || attributes->time_to_die < 0 ||
-        attributes->time_to_eat < 0 || attributes->time_to_sleep < 0)
-    {
-        error_handler("arguments 1 - 5 must be positive integers.");
-        return (0);
-    }
     if (argc == 6)
+    {
+        if (!is_digit(argv[5]) || ft_atoi(argv[5]) < -1)
+        {
+            error_handler("argument 5 must be positive integer.");
+            return (0);
+        }
         attributes->number_of_meals = ft_atoi(argv[5]);
+    }
     else
         attributes->number_of_meals = -1;
-    if (attributes->number_of_meals < -1)
-    {
-        error_handler("arguments 1 - 5 must be positive integers.");
-        return (0);
-    }
     return (1);
 }
 

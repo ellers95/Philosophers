@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:03:46 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/15 14:04:48 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/16 16:56:43 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void    ft_usleep(size_t time_to_sleep);
 void    error_handler(char *str);
 int     check_death(t_philo *philo);
 int     ft_atoi(char *str);
+int     is_digit(const char *str);
 void    print_state(t_philo *philo, char *str);
 
 #endif
