@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:08:52 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/16 15:37:08 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/17 14:52:50 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,11 @@ void    spawn_philos(t_philo *philos)
     attributes = philos[0].attributes;
     while (i < attributes->number_of_philos)
     {
+        //printf("spawn philo while loop\n");
         if (pthread_create(&philos[i].thread, NULL, run_philo, &philos[i]))
             error_handler("Thread creation failed");
         i++;
     }
-    i = 0;
-    while (i < attributes->number_of_philos)
-    {
-        pthread_detach(philos[i].thread);
-        i++;
-    }   
 }
 
 void    join_philos(t_philo *philos)
