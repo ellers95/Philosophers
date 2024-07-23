@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 15:20:03 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/17 15:31:38 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/23 15:52:09 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void    *run_philo(void *this)
     kill_switch = 0;
     //printf("run philo beginning\n");
     philo = (t_philo *)this;
+    if (philo->id % 2)
+        ft_usleep(philo->attributes->time_to_eat - 10);
     while (1)
     {
         
@@ -60,7 +62,7 @@ void    eat(t_philo *philo)
         pthread_mutex_unlock(philo->left_fork);
         return ;
     }
-    if (philo->id % 2 == 0)
+    else if (philo->id % 2 == 0)
     {
         pthread_mutex_lock(philo->right_fork);
         print_state(philo, "has taken a fork");
@@ -74,6 +76,7 @@ void    eat(t_philo *philo)
     }
     print_state(philo, "has taken a fork");
     print_state(philo, "is eating");
+    //philo->times_eaten++;
     philo->last_meal = get_time_ms();
     ft_usleep(philo->attributes->time_to_eat);
     philo->times_eaten++;

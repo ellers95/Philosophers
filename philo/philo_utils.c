@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:34:32 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/17 15:29:27 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:04:50 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int check_death(t_philo *philo)
     return (0);
 }
 
-// always eat 1 extra meal
+
 void    god(t_philo *philos, t_attributes *attributes)
 {
     int i;
@@ -70,6 +70,7 @@ void    god(t_philo *philos, t_attributes *attributes)
                 //pthread_mutex_unlock(philos[i].death);
                 return ;
             }
+            //printf("%d", philo[i].times_eaten)
             if (attributes->number_of_meals != -1 && philos[i].times_eaten == attributes->number_of_meals)
                 everyone_ate = 1;
             //pthread_mutex_unlock(philos[i].death);

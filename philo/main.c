@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:02:47 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/17 14:38:01 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:06:50 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ int main(int argc, char **argv)
     
     initialize_philos(philos, &attributes, &mutex);
     spawn_philos(philos);
-    
     god(philos, &attributes);
-    
+    // if you don't call join_philos, philos will die but the program segfaults
+    join_philos(philos);
     destroy_mutex(attributes.number_of_philos, &mutex);
     free(philos);
     return (0);
