@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 16:35:06 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/23 16:32:39 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/23 17:56:46 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,16 @@
 // Print the current state of a philosopher.
 void    print_state(t_philo *philo, char *str)
 {
+    char    dead;
     size_t  time_stamp;
 
+    dead = 0;
+    pthread_mutex_lock(philo->death);
+    if (*philo->is_dead)
+        dead = 1;
+    pthread_mutex_unlock(philo->death);
+    if (dead)
+        return ;
     time_stamp = get_time_ms() - philo->attributes->start_time;
     pthread_mutex_lock(philo->print);
     printf("%zu %d %s\n", time_stamp, philo->id, str);

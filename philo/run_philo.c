@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 15:20:03 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/23 16:43:54 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/23 17:52:14 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void    *run_philo(void *this)
         // Check if the philosopher is dead
         pthread_mutex_lock(philo->death);
        // printf("before eating\n"); << DEBUGGING
-        if (philo->is_dead == 1)
+        if (*philo->is_dead == 1)
             kill_switch = 1;
         pthread_mutex_unlock(philo->death);
         // Exit the loop if the philosopher is dead
@@ -39,7 +39,7 @@ void    *run_philo(void *this)
         eat(philo);
         // Check if the philosopher is dead again after eating
         pthread_mutex_lock(philo->death);
-        if (philo->is_dead)
+        if (*philo->is_dead)
             kill_switch = 1;
         pthread_mutex_unlock(philo->death);
         if (kill_switch == 1)
@@ -48,7 +48,7 @@ void    *run_philo(void *this)
         ft_sleep(philo);
         // Check if the philosopher is dead after sleeping
         pthread_mutex_lock(philo->death);
-        if (philo->is_dead)
+        if (*philo->is_dead)
             kill_switch = 1;
         pthread_mutex_unlock(philo->death);
         if (kill_switch == 1)
@@ -67,8 +67,6 @@ void    eat(t_philo *philo)
         pthread_mutex_lock(philo->left_fork);
         print_state(philo, "has taken a fork");
         ft_usleep(philo->attributes->time_to_die + 1);
-        philo->is_dead = 1;
-        print_state(philo, "died");
         pthread_mutex_unlock(philo->left_fork);
         return ;
     }

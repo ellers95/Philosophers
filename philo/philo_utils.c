@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:34:32 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/23 16:43:14 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/23 18:20:30 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,9 @@ int check_death(t_philo *philo)
     // If the time since the last meal is greater than the time to die, the philosopher dies.
     if (time_since_last_meal > time_to_die)
     {
-        
-        pthread_mutex_lock(philo->death);
-        philo->is_dead = 1;
         print_state(philo, "died");
+        pthread_mutex_lock(philo->death);
+        *philo->is_dead = 1;
         pthread_mutex_unlock(philo->death);
         return (1);
     }
@@ -60,16 +59,16 @@ int check_death(t_philo *philo)
 void    god(t_philo *philos, t_attributes *attributes)
 {
     int i;
-    int everyone_ate;
+    int done_eating;
     
-    while (1 && !philos->is_dead)
+    ft_usleep(attributes->time_to_die);
+    while (1)
     {
-        everyone_ate = 0;
+        done_eating = 0;
         i = 0;
         // Check each philosopher's status in a loop.
         while (i < attributes->number_of_philos)
         {
-            //pthread_mutex_lock(philos[i].death); DELETE?
             if (check_death(&philos[i]))
             {
                 //pthread_mutex_unlock(philos[i].death); DELETE?
@@ -77,13 +76,18 @@ void    god(t_philo *philos, t_attributes *attributes)
             }
             //printf("%d", philo[i].times_eaten) << DEBUGGING
             // If all philosophers have eaten the required number of meals, end the simulation.
-            if (attributes->number_of_meals != -1 && philos[i].times_eaten == attributes->number_of_meals)
-                everyone_ate = 1;
-            //pthread_mutex_unlock(philos[i].death); DELETE?
+            //pthread_mutex_lock(philos[i].meal); DELETE?
+            if (attributes->number_of_meals != -1 && philos[i].times_eaten >= attributes->number_of_meals)
+                done_eating++;
+            //pthread_mutex_unlock(philos[i].meal); DELETE?
             i++;
         }
-        if (everyone_ate == 1)
+        if (done_eating == attributes->number_of_philos)
+        {
+            pthread_mutex_lock(philos->death);
+            *philos->is_dead = 1;
+            pthread_mutex_unlock(philos->death);
             return ;
-        usleep(1000);
+        }
     }
 }

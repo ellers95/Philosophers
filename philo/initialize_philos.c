@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:08:52 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/23 16:43:23 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/23 18:24:02 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,15 @@
 // Initialize philosophers with their respective attributes and mutexes.
 void    initialize_philos(t_philo *philos, t_attributes *attributes, t_mutex *mutex)
 {
-    int i;
+    int         i;
+    static int  deathflag;
 
     i = 0;
+    deathflag = 0;
     while (i < attributes->number_of_philos)
     {
         philos[i].id = i + 1;
-        philos[i].is_dead = 0;
+        philos[i].is_dead = &deathflag;
         philos[i].times_eaten = 0;
         philos[i].last_meal = get_time_ms();
         philos[i].attributes = attributes;
@@ -82,6 +84,9 @@ int initialize_mutex(int number_of_philos, t_mutex *mutex)
         }
         i++;
     }
+    // destroy forks before freeing
+    // create a function that inits forks
+    // create mutex for mealcount
     if (pthread_mutex_init(&mutex->death, NULL) != 0)
     {
         free(mutex->forks);

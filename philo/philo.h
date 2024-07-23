@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:03:46 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/23 16:40:08 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/23 17:39:07 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_attributes
 typedef struct s_philo
 {
     int             id;             // Philosopher's ID
-    int             is_dead;        // Flag to indicate if the philosopher is dead
+    int             *is_dead;        // Flag to indicate if the philosopher is dead
     int             times_eaten;
     pthread_t       thread;         // Thread ID
     pthread_mutex_t *right_fork;
