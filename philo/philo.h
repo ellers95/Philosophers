@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:03:46 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/16 16:56:43 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:40:08 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <sys/time.h>
 #include <pthread.h>
 
+// Struct to hold the simulation attributes.
 typedef struct s_attributes
 {
     size_t      start_time;
@@ -30,28 +31,30 @@ typedef struct s_attributes
     int         number_of_meals;
 } t_attributes;
 
+// Struct to hold the philosopher's state.
 typedef struct s_philo
 {
-    int             id;
-    int             is_dead;
+    int             id;             // Philosopher's ID
+    int             is_dead;        // Flag to indicate if the philosopher is dead
     int             times_eaten;
-    pthread_t       thread;
+    pthread_t       thread;         // Thread ID
     pthread_mutex_t *right_fork;
     pthread_mutex_t *left_fork;
     pthread_mutex_t *death;
     pthread_mutex_t *print;
-    size_t          last_meal;
-    t_attributes    *attributes;
+    size_t          last_meal;      // Timestamp of the last meal
+    t_attributes    *attributes;    // Pointer to the simulation attributes
 } t_philo;
 
+// Struct to hold all mutexes.
 typedef struct s_mutex
 {
-    pthread_mutex_t *forks;
-    pthread_mutex_t death;
-    pthread_mutex_t print;
+    pthread_mutex_t *forks;         // Array of fork mutexes
+    pthread_mutex_t death;          // Mutex for handling death state
+    pthread_mutex_t print;          // Mutex for printing output
 } t_mutex;
 
-//prototypes
+// Function prototypes
 int     set_attributes(t_attributes *attributes, int argc, char **argv);
 void    *run_philo(void *this);
 void    initialize_philos(t_philo *philos, t_attributes *attributes, t_mutex *mutex);

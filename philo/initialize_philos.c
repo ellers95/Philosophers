@@ -6,12 +6,13 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:08:52 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/17 14:52:50 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:43:23 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+// Initialize philosophers with their respective attributes and mutexes.
 void    initialize_philos(t_philo *philos, t_attributes *attributes, t_mutex *mutex)
 {
     int i;
@@ -31,7 +32,7 @@ void    initialize_philos(t_philo *philos, t_attributes *attributes, t_mutex *mu
         i++;
     }
 }
-
+// Spawn threads for each philosopher.
 void    spawn_philos(t_philo *philos)
 {
     int i;
@@ -41,13 +42,14 @@ void    spawn_philos(t_philo *philos)
     attributes = philos[0].attributes;
     while (i < attributes->number_of_philos)
     {
-        //printf("spawn philo while loop\n");
+        //printf("spawn philo while loop\n"); << DEBUGGING
         if (pthread_create(&philos[i].thread, NULL, run_philo, &philos[i]))
             error_handler("Thread creation failed");
         i++;
     }
 }
 
+// Join threads for each philosopher.
 void    join_philos(t_philo *philos)
 {
     int i;
@@ -62,6 +64,7 @@ void    join_philos(t_philo *philos)
     }
 }
 
+// Initialize mutexes for forks, death, and print.
 int initialize_mutex(int number_of_philos, t_mutex *mutex)
 {
     int i;
@@ -93,6 +96,7 @@ int initialize_mutex(int number_of_philos, t_mutex *mutex)
     return (1);
 }
 
+// Destroy mutexes for forks, death, and print.
 int destroy_mutex(int number_of_philos, t_mutex *mutex)
 {
     int i;

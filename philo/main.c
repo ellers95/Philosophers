@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:02:47 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/23 16:06:50 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:46:14 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void    error_handler(char *str)
     exit (1);
 }
 
+// Set simulation attributes from command line arguments.
 int set_attributes(t_attributes *attributes, int argc, char **argv)
 {
     int i;
@@ -57,23 +58,30 @@ int main(int argc, char **argv)
     t_mutex         mutex;
     t_philo         *philos;
     
-    
+     // Set simulation attributes from command line arguments.
     if (!set_attributes(&attributes, argc, argv))
         error_handler("Invalid arguments");
-    
+    // Allocate memory for philosophers.
     philos = malloc(sizeof(t_philo) * attributes.number_of_philos);
     if (!philos)
         error_handler("Memory allocation failed");
+    // Initialize mutexes.
     if (!initialize_mutex(attributes.number_of_philos, &mutex))
         error_handler("Mutex initialization failed");
+    // Record the start time of the simulation.
     attributes.start_time = get_time_ms();
-    
+    // Initialize philosopher attributes and mutexes.
     initialize_philos(philos, &attributes, &mutex);
+    // Spawn philosopher threads.
     spawn_philos(philos);
+    // Start the god thread to monitor philosophers.
     god(philos, &attributes);
     // if you don't call join_philos, philos will die but the program segfaults
+    // Join philosopher threads to ensure they finish before exiting.
     join_philos(philos);
+    // Destroy mutexes to clean up.
     destroy_mutex(attributes.number_of_philos, &mutex);
+    // Free the memory allocated for philosophers.
     free(philos);
     return (0);
 }
