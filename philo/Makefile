@@ -3,6 +3,7 @@ CFLAGS = -Wall -Wextra -Werror -g
 
 SRCS = main.c \
 initialize_philos.c \
+mutexes.c \
 philo_print.c \
 philo_utils.c \
 philo_libft_utils.c \

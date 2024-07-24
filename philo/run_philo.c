@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 15:20:03 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/23 17:52:14 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:44:06 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,9 @@ void    eat(t_philo *philo)
     // Update last meal time and increment the eat counter.
     philo->last_meal = get_time_ms();
     ft_usleep(philo->attributes->time_to_eat);
+    pthread_mutex_lock(&philo->times_eaten_mutex);
     philo->times_eaten++;
+    pthread_mutex_unlock(&philo->times_eaten_mutex);
     // Release the forks after eating.
     pthread_mutex_unlock(philo->left_fork);
     pthread_mutex_unlock(philo->right_fork);

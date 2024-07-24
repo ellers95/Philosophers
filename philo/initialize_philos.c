@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:08:52 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/23 18:24:02 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:58:19 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,56 +64,4 @@ void    join_philos(t_philo *philos)
         pthread_join(philos[i].thread, NULL);
         i++;
     }
-}
-
-// Initialize mutexes for forks, death, and print.
-int initialize_mutex(int number_of_philos, t_mutex *mutex)
-{
-    int i;
-
-    i = 0;
-    mutex->forks = malloc(sizeof(pthread_mutex_t) *number_of_philos);
-    if (!mutex->forks)
-        return (0);
-    while (i < number_of_philos)
-    {
-        if (pthread_mutex_init(&mutex->forks[i], NULL) != 0)
-        {
-            free(mutex->forks);
-            return (0);
-        }
-        i++;
-    }
-    // destroy forks before freeing
-    // create a function that inits forks
-    // create mutex for mealcount
-    if (pthread_mutex_init(&mutex->death, NULL) != 0)
-    {
-        free(mutex->forks);
-        return (0);
-    }
-    if (pthread_mutex_init(&mutex->print, NULL) != 0)
-    {
-        pthread_mutex_destroy(&mutex->death);
-        free(mutex->forks);
-        return (0);
-    }
-    return (1);
-}
-
-// Destroy mutexes for forks, death, and print.
-int destroy_mutex(int number_of_philos, t_mutex *mutex)
-{
-    int i;
-
-    i = 0;
-    while (i < number_of_philos)
-    {
-        pthread_mutex_destroy(&mutex->forks[i]);
-        i++;
-    }
-    free(mutex->forks);
-    pthread_mutex_destroy(&mutex->death);
-    pthread_mutex_destroy(&mutex->print);
-    return (1);
 }

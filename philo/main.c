@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:02:47 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/23 17:39:53 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:44:58 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     if (!philos)
         error_handler("Memory allocation failed");
     // Initialize mutexes.
-    if (!initialize_mutex(attributes.number_of_philos, &mutex))
+    if (!initialize_mutex(attributes.number_of_philos, &mutex, philos))
         error_handler("Mutex initialization failed");
     // Record the start time of the simulation.
     attributes.start_time = get_time_ms();
@@ -80,7 +80,7 @@ int main(int argc, char **argv)
     // Join philosopher threads to ensure they finish before exiting.
     join_philos(philos);
     // Destroy mutexes to clean up.
-    destroy_mutex(attributes.number_of_philos, &mutex);
+    destroy_mutex(attributes.number_of_philos, &mutex, philos);
     // Free the memory allocated for philosophers.
     free(philos);
     return (0);

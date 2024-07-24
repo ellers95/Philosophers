@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:03:46 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/23 17:39:07 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/24 17:32:32 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_philo
     pthread_mutex_t *left_fork;
     pthread_mutex_t *death;
     pthread_mutex_t *print;
+    pthread_mutex_t times_eaten_mutex;    // Mutex for meals eaten
     size_t          last_meal;      // Timestamp of the last meal
     t_attributes    *attributes;    // Pointer to the simulation attributes
 } t_philo;
@@ -64,8 +65,10 @@ void    god(t_philo *philos, t_attributes *attributes);
 void    eat(t_philo *philo);
 void    ft_sleep(t_philo *philo);
 void    think(t_philo *philo);
-int     initialize_mutex(int number_of_philos, t_mutex *mutex);
-int     destroy_mutex(int number_of_philos, t_mutex *mutex);
+int     initialize_forks_and_times_eaten_mutexes(int number_of_philos, t_mutex *mutex, t_philo *philos);
+int     initialize_death_and_print_mutexes(t_mutex *mutex);
+int     initialize_mutex(int number_of_philos, t_mutex *mutex, t_philo *philos);
+int     destroy_mutex(int number_of_philos, t_mutex *mutex, t_philo *philos);
 size_t  get_time_ms(void);
 void    ft_usleep(size_t time_to_sleep);
 void    error_handler(char *str);
