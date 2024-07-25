@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 14:15:51 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/25 14:21:43 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:17:09 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void    update_last_meal(t_philo *philo)
 size_t  get_last_meal(t_philo *philo)
 {
     size_t  last_meal;
+    
     pthread_mutex_lock(&philo->last_meal_mutex);
     last_meal = philo->last_meal;
     pthread_mutex_unlock(&philo->last_meal_mutex);

@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:34:32 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/25 14:39:53 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:24:11 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,21 @@ int check_death(t_philo *philo)
         pthread_mutex_lock(philo->death);
         *philo->death_flag = 1;
         pthread_mutex_unlock(philo->death);
-        //print_state(philo, "died");
         pthread_mutex_lock(philo->print);
-        printf("new die stuff i guess\n");
+        printf("%zu %d %s\n", get_time_ms() - philo->attributes->start_time, philo->id, "died");
         pthread_mutex_unlock(philo->print);
         return (1);
     }
     return (0);
+}
+int getmealcount(t_philo *philo)
+{
+    int mealcount;
+
+    pthread_mutex_lock(&philo->times_eaten_mutex);
+    mealcount = philo->times_eaten;
+    pthread_mutex_unlock(&philo->times_eaten_mutex);
+    return (mealcount);
 }
 
 // This function simulates the god thread, which monitors the philosophers.
@@ -71,7 +79,7 @@ void    god(t_philo *philos, t_attributes *attributes)
         {
             if (check_death(&philos[i]))
                 return ;
-            if (attributes->number_of_meals != -1 && philos[i].times_eaten >= attributes->number_of_meals) // If all philosophers have eaten the required number of meals, end the simulation.
+            if (attributes->number_of_meals != -1 && getmealcount(&philos[i]) >= attributes->number_of_meals) // If all philosophers have eaten the required number of meals, end the simulation.
                 done_eating++;
             i++;
         }

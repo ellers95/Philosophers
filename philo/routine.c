@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 12:35:36 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/25 14:20:16 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:36:25 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ void    eat(t_philo *philo)
         pthread_mutex_unlock(philo->left_fork);
         return ;
     }
-    handle_forks(philo);
+    pthread_mutex_lock(philo->right_fork); // Even ID philosophers pick up the right fork first.
+    print_state(philo, "has taken a fork");
+    pthread_mutex_lock(philo->left_fork); // Odd ID philosophers pick up the left fork first.
+    print_state(philo, "has taken a fork");
     print_state(philo, "is eating");
     update_last_meal(philo);
     ft_usleep(philo->attributes->time_to_eat);
@@ -33,30 +36,12 @@ void    eat(t_philo *philo)
     pthread_mutex_unlock(philo->right_fork);
 }
 
-void    handle_forks(t_philo *philo)
-{
-    if (philo->id % 2 == 0)
-    {
-        pthread_mutex_lock(philo->right_fork); // Even ID philosophers pick up the right fork first.
-        print_state(philo, "has taken a fork");
-        pthread_mutex_lock(philo->left_fork);
-    }
-    else
-    {
-        pthread_mutex_lock(philo->left_fork); // Odd ID philosophers pick up the left fork first.
-        print_state(philo, "has taken a fork");
-        pthread_mutex_lock(philo->right_fork);
-    }
-    print_state(philo, "has taken a fork");
-}
-
 // This function handles the sleeping behavior of a philosopher.
 void    ft_sleep(t_philo *philo)
 {
     print_state(philo, "is sleeping");
     ft_usleep(philo->attributes->time_to_sleep);
 }
-
 
 // This function handles the thinking behavior of a philosopher.
 void    think(t_philo *philo)

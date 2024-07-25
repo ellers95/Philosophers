@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:02:47 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/25 13:12:02 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:10:35 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,13 @@ int main(int argc, char **argv)
     philos = malloc(sizeof(t_philo) * attributes.number_of_philos); // Allocate memory for philosophers.
     if (!philos)
         error_handler("Memory allocation failed");
-    if (!initialize_mutex(attributes.number_of_philos, &mutex, philos)) // Initialize mutexes.
+    if (!initialize_mutex(attributes.number_of_philos, &mutex, philos))
+    {
+        free(philos);
         error_handler("Mutex initialization failed");
-    attributes.start_time = get_time_ms(); // Record the start time of the simulation.
+    }
     initialize_philos(philos, &attributes, &mutex); // Initialize philosopher attributes and mutexes.
+    attributes.start_time = get_time_ms(); // Record the start time of the simulation.
     create_philo_threads(philos); // Spawn philosopher threads.
     god(philos, &attributes); // Start the god thread to monitor philosophers.
     join_philos(philos); // Join philosopher threads to ensure they finish before exiting.
