@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:34:32 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/23 18:20:30 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/25 14:39:53 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,18 @@ int check_death(t_philo *philo)
 
     current_time = get_time_ms();
     time_to_die = (size_t)(philo->attributes->time_to_die);
+    pthread_mutex_lock(&philo->last_meal_mutex);
     time_since_last_meal = current_time - philo->last_meal;
-    //printf("check death before if statement\n"); << DEBUGGING
-    //printf("%zu\n", time_since_last_meal); << DEBUGGING
-    //printf("%zu\n", time_to_die); << DEBUGGING
-    // If the time since the last meal is greater than the time to die, the philosopher dies.
-    if (time_since_last_meal > time_to_die)
+    pthread_mutex_unlock(&philo->last_meal_mutex);
+    if (time_since_last_meal > time_to_die) // If the time since the last meal is greater than the time to die, the philosopher dies.
     {
-        print_state(philo, "died");
         pthread_mutex_lock(philo->death);
-        *philo->is_dead = 1;
+        *philo->death_flag = 1;
         pthread_mutex_unlock(philo->death);
+        //print_state(philo, "died");
+        pthread_mutex_lock(philo->print);
+        printf("new die stuff i guess\n");
+        pthread_mutex_unlock(philo->print);
         return (1);
     }
     return (0);
@@ -66,26 +67,18 @@ void    god(t_philo *philos, t_attributes *attributes)
     {
         done_eating = 0;
         i = 0;
-        // Check each philosopher's status in a loop.
-        while (i < attributes->number_of_philos)
+        while (i < attributes->number_of_philos) // Check each philosopher's status in a loop.
         {
             if (check_death(&philos[i]))
-            {
-                //pthread_mutex_unlock(philos[i].death); DELETE?
                 return ;
-            }
-            //printf("%d", philo[i].times_eaten) << DEBUGGING
-            // If all philosophers have eaten the required number of meals, end the simulation.
-            //pthread_mutex_lock(philos[i].meal); DELETE?
-            if (attributes->number_of_meals != -1 && philos[i].times_eaten >= attributes->number_of_meals)
+            if (attributes->number_of_meals != -1 && philos[i].times_eaten >= attributes->number_of_meals) // If all philosophers have eaten the required number of meals, end the simulation.
                 done_eating++;
-            //pthread_mutex_unlock(philos[i].meal); DELETE?
             i++;
         }
         if (done_eating == attributes->number_of_philos)
         {
             pthread_mutex_lock(philos->death);
-            *philos->is_dead = 1;
+            *philos->death_flag = 1;
             pthread_mutex_unlock(philos->death);
             return ;
         }

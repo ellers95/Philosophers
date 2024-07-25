@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:02:47 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/24 16:44:58 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:12:02 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ void    error_handler(char *str)
     exit (1);
 }
 
-// Set simulation attributes from command line arguments.
-int set_attributes(t_attributes *attributes, int argc, char **argv)
+int validate_arguments(int argc, char **argv, t_attributes *attributes)
 {
     int i;
 
@@ -36,10 +35,6 @@ int set_attributes(t_attributes *attributes, int argc, char **argv)
         }
         i++;
     }
-    attributes->number_of_philos = ft_atoi(argv[1]);
-    attributes->time_to_die = ft_atoi(argv[2]);
-    attributes->time_to_eat = ft_atoi(argv[3]);
-    attributes->time_to_sleep = ft_atoi(argv[4]);
     if (argc == 6)
     {
         if (!is_digit(argv[5]) || ft_atoi(argv[5]) <= 0)
@@ -52,36 +47,37 @@ int set_attributes(t_attributes *attributes, int argc, char **argv)
     return (1);
 }
 
+// Set simulation attributes from command line arguments.
+int set_attributes(t_attributes *attributes, int argc, char **argv)
+{
+    if (!validate_arguments(argc, argv, attributes))
+        return (0);
+    attributes->number_of_philos = ft_atoi(argv[1]);
+    attributes->time_to_die = ft_atoi(argv[2]);
+    attributes->time_to_eat = ft_atoi(argv[3]);
+    attributes->time_to_sleep = ft_atoi(argv[4]);
+    return (1);
+}
+
 int main(int argc, char **argv)
 {
     t_attributes    attributes;
     t_mutex         mutex;
     t_philo         *philos;
-    
-     // Set simulation attributes from command line arguments.
-    if (!set_attributes(&attributes, argc, argv))
+
+    if (!set_attributes(&attributes, argc, argv)) // Set simulation attributes from command line arguments.
         error_handler("Invalid arguments");
-    // Allocate memory for philosophers.
-    philos = malloc(sizeof(t_philo) * attributes.number_of_philos);
+    philos = malloc(sizeof(t_philo) * attributes.number_of_philos); // Allocate memory for philosophers.
     if (!philos)
         error_handler("Memory allocation failed");
-    // Initialize mutexes.
-    if (!initialize_mutex(attributes.number_of_philos, &mutex, philos))
+    if (!initialize_mutex(attributes.number_of_philos, &mutex, philos)) // Initialize mutexes.
         error_handler("Mutex initialization failed");
-    // Record the start time of the simulation.
-    attributes.start_time = get_time_ms();
-    // Initialize philosopher attributes and mutexes.
-    initialize_philos(philos, &attributes, &mutex);
-    // Spawn philosopher threads.
-    spawn_philos(philos);
-    // Start the god thread to monitor philosophers.
-    god(philos, &attributes);
-    // if you don't call join_philos, philos will die but the program segfaults
-    // Join philosopher threads to ensure they finish before exiting.
-    join_philos(philos);
-    // Destroy mutexes to clean up.
-    destroy_mutex(attributes.number_of_philos, &mutex, philos);
-    // Free the memory allocated for philosophers.
-    free(philos);
+    attributes.start_time = get_time_ms(); // Record the start time of the simulation.
+    initialize_philos(philos, &attributes, &mutex); // Initialize philosopher attributes and mutexes.
+    create_philo_threads(philos); // Spawn philosopher threads.
+    god(philos, &attributes); // Start the god thread to monitor philosophers.
+    join_philos(philos); // Join philosopher threads to ensure they finish before exiting.
+    destroy_mutex(attributes.number_of_philos, &mutex, philos); // Destroy mutexes to clean up.
+    free(philos); // Free the memory allocated for philosophers.
     return (0);
 }

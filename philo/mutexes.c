@@ -6,14 +6,14 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 16:57:17 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/24 17:34:19 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/25 14:13:33 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 //initialize mutexes for forks and times eaten
-int initialize_forks_and_times_eaten_mutexes(int number_of_philos, t_mutex *mutex, t_philo *philos)
+int initialize_forks_and_times_eaten_mutex(int number_of_philos, t_mutex *mutex, t_philo *philos)
 {
     int i;
 
@@ -23,17 +23,15 @@ int initialize_forks_and_times_eaten_mutexes(int number_of_philos, t_mutex *mute
         return (0);
     while (i < number_of_philos)
     {
-        if (pthread_mutex_init(&mutex->forks[i], NULL) != 0)
-        {
-            free(mutex->forks);
-            return (0);
-        }
-        if (pthread_mutex_init(&philos[i].times_eaten_mutex, NULL) != 0)
+        if (pthread_mutex_init(&mutex->forks[i], NULL) != 0 || 
+            pthread_mutex_init(&philos[i].times_eaten_mutex, NULL) != 0 ||
+            pthread_mutex_init(&philos[i].last_meal_mutex, NULL) != 0)
         {
             while (i-- > 0)
             {
                 pthread_mutex_destroy(&mutex->forks[i]);
                 pthread_mutex_destroy(&philos[i].times_eaten_mutex);
+                pthread_mutex_destroy(&philos[i].last_meal_mutex);
             }
             free(mutex->forks);
             return (0);
@@ -44,7 +42,7 @@ int initialize_forks_and_times_eaten_mutexes(int number_of_philos, t_mutex *mute
 }
 
 // initialize mutexes for death and print
-int initialize_death_and_print_mutexes(t_mutex *mutex)
+int initialize_death_and_print_mutex(t_mutex *mutex)
 {
     if (pthread_mutex_init(&mutex->death, NULL) != 0)
     {
@@ -62,9 +60,9 @@ int initialize_death_and_print_mutexes(t_mutex *mutex)
 
 int initialize_mutex(int number_of_philos, t_mutex *mutex, t_philo *philos)
 {
-    if (!initialize_forks_and_times_eaten_mutexes(number_of_philos, mutex, philos))
+    if (!initialize_forks_and_times_eaten_mutex(number_of_philos, mutex, philos))
         return (0);
-    if (!initialize_death_and_print_mutexes(mutex))
+    if (!initialize_death_and_print_mutex(mutex))
         return (0);
     return (1);
 }

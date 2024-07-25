@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 15:20:03 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/24 16:44:06 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:04:12 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,97 +16,36 @@
 void    *run_philo(void *this)
 {
     t_philo *philo;
-    int     kill_switch;
 
-    kill_switch = 0;
-    //printf("run philo beginning\n"); << DEBUGGING
     philo = (t_philo *)this;
-    // If the philosopher's ID is odd, they wait a bit to prevent deadlock
-    if (philo->id % 2)
+    if (philo->id % 2) // If the philosopher's ID is odd, they wait a bit to prevent deadlock
         ft_usleep(philo->attributes->time_to_eat - 10);
+    run_philo_loop(philo);
+    return (NULL);
+}
+
+void    run_philo_loop(t_philo *philo)
+{
     while (1)
     {
-        // Check if the philosopher is dead
-        pthread_mutex_lock(philo->death);
-       // printf("before eating\n"); << DEBUGGING
-        if (*philo->is_dead == 1)
-            kill_switch = 1;
-        pthread_mutex_unlock(philo->death);
-        // Exit the loop if the philosopher is dead
-        if (kill_switch == 1)
-            return (NULL);
-        // The philosopher tries to eat
+        if (run_check_death(philo))
+            return ;
         eat(philo);
-        // Check if the philosopher is dead again after eating
-        pthread_mutex_lock(philo->death);
-        if (*philo->is_dead)
-            kill_switch = 1;
-        pthread_mutex_unlock(philo->death);
-        if (kill_switch == 1)
-            return (NULL);
-        // The philosopher goes to sleep
+        if (run_check_death(philo))
+            return ;
         ft_sleep(philo);
-        // Check if the philosopher is dead after sleeping
-        pthread_mutex_lock(philo->death);
-        if (*philo->is_dead)
-            kill_switch = 1;
-        pthread_mutex_unlock(philo->death);
-        if (kill_switch == 1)
-            return (NULL);
-         // The philosopher thinks
+        if (run_check_death(philo))
+            return ;
         think(philo);
     }
 }
 
-// This function handles the eating behavior of a philosopher.
-void    eat(t_philo *philo)
+int run_check_death(t_philo *philo)
 {
-    if (philo->attributes->number_of_philos == 1)
-    {
-        // If there's only one philosopher, they can never eat and will eventually die.
-        pthread_mutex_lock(philo->left_fork);
-        print_state(philo, "has taken a fork");
-        ft_usleep(philo->attributes->time_to_die + 1);
-        pthread_mutex_unlock(philo->left_fork);
-        return ;
-    }
-    else if (philo->id % 2 == 0)
-    {
-        // Even ID philosophers pick up the right fork first.
-        pthread_mutex_lock(philo->right_fork);
-        print_state(philo, "has taken a fork");
-        pthread_mutex_lock(philo->left_fork);
-    }
-    else
-    {
-        // Odd ID philosophers pick up the left fork first.
-        pthread_mutex_lock(philo->left_fork);
-        print_state(philo, "has taken a fork");
-        pthread_mutex_lock(philo->right_fork);
-    }
-    print_state(philo, "has taken a fork");
-    print_state(philo, "is eating");
-    // Update last meal time and increment the eat counter.
-    philo->last_meal = get_time_ms();
-    ft_usleep(philo->attributes->time_to_eat);
-    pthread_mutex_lock(&philo->times_eaten_mutex);
-    philo->times_eaten++;
-    pthread_mutex_unlock(&philo->times_eaten_mutex);
-    // Release the forks after eating.
-    pthread_mutex_unlock(philo->left_fork);
-    pthread_mutex_unlock(philo->right_fork);
-}
+    int death_flag;
 
-// This function handles the sleeping behavior of a philosopher.
-void    ft_sleep(t_philo *philo)
-{
-    print_state(philo, "is sleeping");
-    ft_usleep(philo->attributes->time_to_sleep);
-}
-
-
-// This function handles the thinking behavior of a philosopher.
-void    think(t_philo *philo)
-{
-    print_state(philo, "is thinking");
+    pthread_mutex_lock(philo->death);
+    death_flag = *philo->death_flag;
+    pthread_mutex_unlock(philo->death);
+    return (death_flag);
 }

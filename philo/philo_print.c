@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 16:35:06 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/23 17:56:46 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:51:15 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void    print_state(t_philo *philo, char *str)
 
     dead = 0;
     pthread_mutex_lock(philo->death);
-    if (*philo->is_dead)
+    if (*philo->death_flag)
         dead = 1;
     pthread_mutex_unlock(philo->death);
     if (dead)

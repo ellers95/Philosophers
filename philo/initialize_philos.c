@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:08:52 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/24 16:58:19 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:12:02 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void    initialize_philos(t_philo *philos, t_attributes *attributes, t_mutex *mu
     while (i < attributes->number_of_philos)
     {
         philos[i].id = i + 1;
-        philos[i].is_dead = &deathflag;
+        philos[i].death_flag = &deathflag;
         philos[i].times_eaten = 0;
         philos[i].last_meal = get_time_ms();
         philos[i].attributes = attributes;
@@ -35,16 +35,15 @@ void    initialize_philos(t_philo *philos, t_attributes *attributes, t_mutex *mu
     }
 }
 // Spawn threads for each philosopher.
-void    spawn_philos(t_philo *philos)
+void    create_philo_threads(t_philo *philos)
 {
-    int i;
+    int             i;
     t_attributes    *attributes;
 
     i = 0;
     attributes = philos[0].attributes;
     while (i < attributes->number_of_philos)
     {
-        //printf("spawn philo while loop\n"); << DEBUGGING
         if (pthread_create(&philos[i].thread, NULL, run_philo, &philos[i]))
             error_handler("Thread creation failed");
         i++;
@@ -54,7 +53,7 @@ void    spawn_philos(t_philo *philos)
 // Join threads for each philosopher.
 void    join_philos(t_philo *philos)
 {
-    int i;
+    int             i;
     t_attributes    *attributes;
 
     i = 0;

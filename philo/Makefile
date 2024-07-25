@@ -7,7 +7,9 @@ mutexes.c \
 philo_print.c \
 philo_utils.c \
 philo_libft_utils.c \
-run_philo.c
+run_philo.c \
+routine.c \
+last_meal.c
 
 HEADERS = philo.h
 OBJS_DIR = objs/

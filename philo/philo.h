@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:03:46 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/24 17:32:32 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/25 14:20:56 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_attributes
 typedef struct s_philo
 {
     int             id;             // Philosopher's ID
-    int             *is_dead;        // Flag to indicate if the philosopher is dead
+    int             *death_flag;    // Flag to indicate if the philosopher is dead
     int             times_eaten;
     pthread_t       thread;         // Thread ID
     pthread_mutex_t *right_fork;
@@ -43,6 +43,7 @@ typedef struct s_philo
     pthread_mutex_t *death;
     pthread_mutex_t *print;
     pthread_mutex_t times_eaten_mutex;    // Mutex for meals eaten
+    pthread_mutex_t last_meal_mutex;      
     size_t          last_meal;      // Timestamp of the last meal
     t_attributes    *attributes;    // Pointer to the simulation attributes
 } t_philo;
@@ -56,17 +57,23 @@ typedef struct s_mutex
 } t_mutex;
 
 // Function prototypes
+int     validate_arguments(int argc, char **argv, t_attributes *attributes);
 int     set_attributes(t_attributes *attributes, int argc, char **argv);
 void    *run_philo(void *this);
+void    run_philo_loop(t_philo *philo);
+int     run_check_death(t_philo *philo);
 void    initialize_philos(t_philo *philos, t_attributes *attributes, t_mutex *mutex);
-void    spawn_philos(t_philo *philos);
+void    create_philo_threads(t_philo *philos);
 void    join_philos(t_philo *philos);
 void    god(t_philo *philos, t_attributes *attributes);
 void    eat(t_philo *philo);
+void    update_last_meal(t_philo *philo);
+size_t  get_last_meal(t_philo *philo);
+void    handle_forks(t_philo *philo);
 void    ft_sleep(t_philo *philo);
 void    think(t_philo *philo);
-int     initialize_forks_and_times_eaten_mutexes(int number_of_philos, t_mutex *mutex, t_philo *philos);
-int     initialize_death_and_print_mutexes(t_mutex *mutex);
+int     initialize_forks_and_times_eaten_mutex(int number_of_philos, t_mutex *mutex, t_philo *philos);
+int     initialize_death_and_print_mutex(t_mutex *mutex);
 int     initialize_mutex(int number_of_philos, t_mutex *mutex, t_philo *philos);
 int     destroy_mutex(int number_of_philos, t_mutex *mutex, t_philo *philos);
 size_t  get_time_ms(void);
