@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:03:46 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/25 18:34:00 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/30 18:54:06 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	*run_philo(void *this);
 void	run_philo_loop(t_philo *philo);
 int		run_check_death(t_philo *philo);
 void	initialize_philos(t_philo *philos, t_attributes \
-	*attributes, t_mutex *mutex);
+	*attributes, t_mutex *mutex, int *death_flag);
 void	create_philo_threads(t_philo *philos);
 void	join_philos(t_philo *philos);
 void	god(t_philo *philos, t_attributes *attributes);
@@ -79,7 +79,7 @@ int		initialize_death_and_print_mutex(t_mutex *mutex, t_philo *philos);
 int		initialize_mutex(int number_of_philos, t_mutex *mutex, t_philo *philos);
 int		destroy_mutex(int number_of_philos, t_mutex *mutex, t_philo *philos);
 size_t	get_time_ms(void);
-void	ft_usleep(size_t time_to_sleep);
+void	ft_usleep(size_t time_to_sleep, t_philo *philo);
 void	error_handler(char *str);
 int		check_death(t_philo *philo);
 int		ft_atoi(char *str);

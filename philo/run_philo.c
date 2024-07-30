@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 15:20:03 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/25 18:43:51 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/30 18:54:36 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*run_philo(void *this)
 
 	philo = (t_philo *)this;
 	if (philo->id % 2)
-		ft_usleep(philo->attributes->time_to_eat - 10);
+		ft_usleep(philo->attributes->time_to_eat - 10, philo);
 	run_philo_loop(philo);
 	return (NULL);
 }
@@ -27,14 +27,32 @@ void	run_philo_loop(t_philo *philo)
 {
 	while (1)
 	{
-		if (run_check_death(philo))
-			return ;
+		pthread_mutex_lock(philo->death);
+		if (*philo->death_flag)
+		{
+            pthread_mutex_unlock(philo->death);
+            //printf("Philosopher %d detected death flag\n", philo->id);
+            return;
+        }
+		pthread_mutex_unlock(philo->death);
 		eat(philo);
-		if (run_check_death(philo))
-			return ;
+		pthread_mutex_lock(philo->death);
+		if (*philo->death_flag)
+		{
+            pthread_mutex_unlock(philo->death);
+            //printf("Philosopher %d detected death flag after eating\n", philo->id);
+            return;
+        }
+		pthread_mutex_unlock(philo->death);
 		ft_sleep(philo);
-		if (run_check_death(philo))
-			return ;
+		pthread_mutex_lock(philo->death);
+		if (*philo->death_flag)
+		{
+            pthread_mutex_unlock(philo->death);
+            //printf("Philosopher %d detected death flag after sleeping\n", philo->id);
+            return;
+        }
+		pthread_mutex_unlock(philo->death);
 		think(philo);
 	}
 }

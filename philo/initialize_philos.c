@@ -6,24 +6,22 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:08:52 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/25 18:36:05 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/30 15:42:47 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 void	initialize_philos(t_philo *philos, t_attributes *attributes, \
-	t_mutex *mutex)
+	t_mutex *mutex, int *death_flag)
 {
 	int			i;
-	static int	deathflag;
 
 	i = 0;
-	deathflag = 0;
 	while (i < attributes->number_of_philos)
 	{
 		philos[i].id = i + 1;
-		philos[i].death_flag = &deathflag;
+		philos[i].death_flag = death_flag;
 		philos[i].times_eaten = 0;
 		philos[i].last_meal = get_time_ms();
 		philos[i].attributes = attributes;
