@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:02:47 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/30 15:42:29 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/25 18:31:43 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,7 @@ int	main(int argc, char **argv)
 	t_attributes	attributes;
 	t_mutex			mutex;
 	t_philo			*philos;
-	int				death_flag;
-	
-	death_flag = 0;
+
 	if (!set_attributes(&attributes, argc, argv))
 		error_handler("Invalid arguments");
 	philos = malloc(sizeof(t_philo) * attributes.number_of_philos);
@@ -76,7 +74,7 @@ int	main(int argc, char **argv)
 		free(philos);
 		error_handler("Mutex initialization failed");
 	}
-	initialize_philos(philos, &attributes, &mutex, &death_flag);
+	initialize_philos(philos, &attributes, &mutex);
 	attributes.start_time = get_time_ms();
 	create_philo_threads(philos);
 	god(philos, &attributes);

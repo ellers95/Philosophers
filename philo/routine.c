@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 12:35:36 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/30 18:55:40 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:58:43 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	eat(t_philo *philo)
 
 void	ft_sleep(t_philo *philo)
 {
-	print_state(philo, "is sleeping");	
+	print_state(philo, "is sleeping");
 	ft_usleep(philo->attributes->time_to_sleep, philo);
 }
 

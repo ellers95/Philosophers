@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 15:20:03 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/30 18:54:36 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:57:55 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,32 +27,14 @@ void	run_philo_loop(t_philo *philo)
 {
 	while (1)
 	{
-		pthread_mutex_lock(philo->death);
-		if (*philo->death_flag)
-		{
-            pthread_mutex_unlock(philo->death);
-            //printf("Philosopher %d detected death flag\n", philo->id);
-            return;
-        }
-		pthread_mutex_unlock(philo->death);
+		if (run_check_death(philo))
+			return ;
 		eat(philo);
-		pthread_mutex_lock(philo->death);
-		if (*philo->death_flag)
-		{
-            pthread_mutex_unlock(philo->death);
-            //printf("Philosopher %d detected death flag after eating\n", philo->id);
-            return;
-        }
-		pthread_mutex_unlock(philo->death);
+		if (run_check_death(philo))
+			return ;
 		ft_sleep(philo);
-		pthread_mutex_lock(philo->death);
-		if (*philo->death_flag)
-		{
-            pthread_mutex_unlock(philo->death);
-            //printf("Philosopher %d detected death flag after sleeping\n", philo->id);
-            return;
-        }
-		pthread_mutex_unlock(philo->death);
+		if (run_check_death(philo))
+			return ;
 		think(philo);
 	}
 }
