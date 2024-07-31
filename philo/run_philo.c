@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 15:20:03 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/31 14:35:26 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/31 14:48:44 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*run_philo(void *this)
 
 	philo = (t_philo *)this;
 	if (philo->id % 2 && philo->attributes->number_of_philos != 1)
-		ft_usleep(philo->attributes->time_to_eat - 10, philo);
+		ft_usleep(philo->attributes->time_to_eat / 2, philo);
 	run_philo_loop(philo);
 	return (NULL);
 }

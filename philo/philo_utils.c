@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
+/*   By: etaattol <etaattol@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:34:32 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/31 12:57:20 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/31 14:53:04 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int	check_death(t_philo *philo)
 		printf("%zu %d %s\n", get_time_ms() - philo->attributes->start_time, \
 			philo->id, "died");
 		return (1);
+		pthread_mutex_unlock(philo->print);
 	}
 	return (0);
 }
@@ -78,7 +79,10 @@ void	god(t_philo *philos, t_attributes *attributes)
 		while (i < attributes->number_of_philos)
 		{
 			if (check_death(&philos[i]))
+			{
+				printf("hello");
 				return ;
+			}
 			if (attributes->number_of_meals != -1 && get_meal_count(&philos[i]) \
 				>= attributes->number_of_meals)
 				done_eating++;
