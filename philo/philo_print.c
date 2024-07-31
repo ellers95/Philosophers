@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_print.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: etaattol <etaattol@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 16:35:06 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/31 14:57:17 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/31 17:19:34 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,7 @@ void	print_state(t_philo *philo, char *str)
 	if (dead)
 		return ;
 	time_stamp = get_time_ms() - philo->attributes->start_time;
-	//printf("printstate before");
 	pthread_mutex_lock(philo->print);
-	//printf("printstate after");
 	printf("%zu %d %s\n", time_stamp, philo->id, str);
 	pthread_mutex_unlock(philo->print);
 }
