@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:08:52 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/25 18:36:05 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/31 18:41:12 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ void	initialize_philos(t_philo *philos, t_attributes *attributes, \
 		philos[i].left_fork = &mutex->forks[i];
 		philos[i].right_fork = &mutex->forks[(i + 1) % \
 			attributes->number_of_philos];
+		if (i == attributes->number_of_philos - 1)
+		{
+			philos[i].left_fork = &mutex->forks[(i + 1) % \
+				attributes->number_of_philos];
+			philos[i].right_fork = &mutex->forks[i];
+		}
 		philos[i].death = &mutex->death;
 		philos[i].print = &mutex->print;
 		i++;

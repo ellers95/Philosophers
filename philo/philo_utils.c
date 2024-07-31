@@ -6,7 +6,7 @@
 /*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:34:32 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/31 16:24:16 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/31 18:37:49 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ void	ft_usleep(size_t time_to_sleep, t_philo *philo)
 	size_t	start;
 	size_t	dead;
 
+	pthread_mutex_lock(&philo->last_meal_mutex);
 	dead = philo->last_meal + philo->attributes->time_to_die;
+	pthread_mutex_unlock(&philo->last_meal_mutex);
 	start = get_time_ms();
 	while ((get_time_ms() - start) < time_to_sleep && get_time_ms() < dead)
 		usleep(100);
