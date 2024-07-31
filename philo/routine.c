@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
+/*   By: etaattol <etaattol@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 12:35:36 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/31 12:58:43 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/31 14:32:13 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,6 @@
 
 void	eat(t_philo *philo)
 {
-	if (philo->attributes->number_of_philos == 1)
-	{
-		pthread_mutex_lock(philo->left_fork);
-		print_state(philo, "has taken a fork");
-		ft_usleep(philo->attributes->time_to_die + 1, philo);
-		pthread_mutex_unlock(philo->left_fork);
-		return ;
-	}
 	pthread_mutex_lock(philo->right_fork);
 	print_state(philo, "has taken a fork");
 	pthread_mutex_lock(philo->left_fork);

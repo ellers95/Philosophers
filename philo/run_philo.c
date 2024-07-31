@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_philo.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: etaattol <etaattol@student.42.fr>          +#+  +:+       +#+        */
+/*   By: etaattol <etaattol@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 15:20:03 by etaattol          #+#    #+#             */
-/*   Updated: 2024/07/31 12:57:55 by etaattol         ###   ########.fr       */
+/*   Updated: 2024/07/31 14:35:26 by etaattol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	*run_philo(void *this)
 	t_philo	*philo;
 
 	philo = (t_philo *)this;
-	if (philo->id % 2)
+	if (philo->id % 2 && philo->attributes->number_of_philos != 1)
 		ft_usleep(philo->attributes->time_to_eat - 10, philo);
 	run_philo_loop(philo);
 	return (NULL);
@@ -25,6 +25,14 @@ void	*run_philo(void *this)
 
 void	run_philo_loop(t_philo *philo)
 {
+	if (philo->attributes->number_of_philos == 1)
+	{
+		pthread_mutex_lock(philo->left_fork);
+		print_state(philo, "has taken a fork");
+		ft_usleep(philo->attributes->time_to_die + 1, philo);
+		pthread_mutex_unlock(philo->left_fork);
+		return ;
+	}
 	while (1)
 	{
 		if (run_check_death(philo))
